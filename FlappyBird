@@ -1,0 +1,9 @@
+import pygame
+import random
+pygame.init()
+
+screen = pygame.display.set_mode((800, 600)) #game window
+pygame.display.set_caption("Flappy Bird") #title
+clock = pygame.time.Clock() #handles FPS
+font = pygame.font.Font(None, 36)
+font2 = pygame.font.Font(None, 72)
