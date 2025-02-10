@@ -46,6 +46,9 @@ class Bird:
         pygame.draw.rect(screen, (0, 255, 0), (self.height))
         #draw the bottom pipe
         pygame.draw.rect(screen. (0, 255, 0), (self.x, self.height + self.gap)))
+        
+    pipes =[]
+    spawn_pipe = 0 #timer for pipe spawn
     
     
 bird = Bird()
@@ -57,7 +60,17 @@ while running: #game loop+================================================
          if event.type == pygame.MOUSEBUTTONDOWN:
                 bird.flap()
            
-    bird.physics()       
+    bird.physics()
+    spawn_pipe += 1
+    if spawn_pipe >= 150: #pipe is spawned every 150 frames
+        pipes.append(Pipe(800))#this INSTANTIATES a new pipe and puts it in the list!
+        spawn_pipe = 0 #resets timer
+        
+    for pipe in pipes: #walks through list of pipes
+        pipe.move() #move each pipe
+        if check_collision(50, bird.y, pipe.x, pipe.height): #check collision whith bird
+            running = False #kill game if you hit a pipe
+    
  # render section -=----------------------------------------------------------          
     screen.fill((0, 0, 0))
     bird.draw()
