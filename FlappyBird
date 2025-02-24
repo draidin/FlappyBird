@@ -7,6 +7,7 @@ pygame.display.set_caption("Flappy Bird") #title
 clock = pygame.time.Clock() #handles FPS
 font = pygame.font.Font(None, 36)
 font2 = pygame.font.Font(None, 72)
+pipeimage = pygame.image.load('pipe.jpg').convert_alpha()
 
 score = 0
 
@@ -29,29 +30,40 @@ class Bird:
       pygame.draw.rect(screen, (255, 0, 0), (50, self.y, 30, 30))
       
 #========================================================================    
- class Pipe:
-     def__init__(self, x):
+class Pipe:
+    def __init__(self, x):
         self.x = x
-        self,height = random,randint(50, 400)
+        self.height = random.randint(50, 400)
         self.gap = 150
         
-    def move)self):
-        self.x -= 2
-        
-    def draw(self):
+    def move(self):
         self.x -= 2
     
     def draw(self):
         #draw the top pipe
-        pygame.draw.rect(screen, (0, 255, 0), (self.height))
+        pygame.draw.rect(screen, (0, 255, 0), (self.x, 0, 50, self.height))
         #draw the bottom pipe
-        pygame.draw.rect(screen. (0, 255, 0), (self.x, self.height + self.gap)))
+        pygame.draw.rect(screen, (0, 255, 0), (self.x, self.height + self.gap, 50, 600 - (self.height + self.gap)))
         
-    pipes =[]
-    spawn_pipe = 0 #timer for pipe spawn
     
-    
+pipes = []
+spawn_pipe = 0 #timer for pipe spawn
 bird = Bird()
+
+def check_collision(bx, by, px, py):
+    #top pipe check
+    if bx + 30 > px and bx < px + 50 and by < py:
+        return True
+    #BOTTOM PIPE CHECK
+    if bx + 30 > px and bx < px + 50 and by + 30 > py + 150:
+        return True
+    return False
+
+ticker+=1
+if ticker%10 == 0:
+    ticker = 0
+    score+=1
+    
 while running: #game loop+================================================
     clock.tick(60)
     for event in pygame.event.get():
@@ -61,6 +73,7 @@ while running: #game loop+================================================
                 bird.flap()
            
     bird.physics()
+    
     spawn_pipe += 1
     if spawn_pipe >= 150: #pipe is spawned every 150 frames
         pipes.append(Pipe(800))#this INSTANTIATES a new pipe and puts it in the list!
@@ -71,6 +84,13 @@ while running: #game loop+================================================
         if check_collision(50, bird.y, pipe.x, pipe.height): #check collision whith bird
             running = False #kill game if you hit a pipe
     
+    i = len(pipes) - 1
+    while i >= 0:
+        if pipes[i].x <= -50:
+            pipes.pop(i)
+        i -= 1
+        
+    
  # render section -=----------------------------------------------------------          
     screen.fill((0, 0, 0))
     bird.draw()
@@ -80,8 +100,16 @@ while running: #game loop+================================================
     score_text2 = font.render(str(score), True, (255, 255, 255))
     screen.blit(score_text2, (750, 20))
         
+    for pipe in pipes:
+        pipe.draw()    
+    
     pygame.display.flip()
+    
         
 #---end of game loop-----------------------------------------------------
-        
+ text = font2.render("GAME OVER", True, (255, 50,50))
+ screen.blit(text, (200, 200))
+ pygame.display.flip()
+ pygame.time.delay(2000)
+ pygame.quit()
 pygame.quit()
