@@ -7,7 +7,7 @@ pygame.display.set_caption("Flappy Bird") #title
 clock = pygame.time.Clock() #handles FPS
 font = pygame.font.Font(None, 36)
 font2 = pygame.font.Font(None, 72)
-pipeimage = pygame.image.load('pipe.jpg').convert_alpha()
+pipe_image = pygame.image.load('pipe.png').convert_alpha()
 
 score = 0
 
@@ -35,17 +35,22 @@ class Pipe:
         self.x = x
         self.height = random.randint(50, 400)
         self.gap = 150
+        self.top_pipe = pygame.transform.flip(pipe_image, False, True) #flip the pipe image for the top pipe
+        self.bottom_pipe = pipe_image
         
     def move(self):
         self.x -= 2
     
     def draw(self):
-        #draw the top pipe
-        pygame.draw.rect(screen, (0, 255, 0), (self.x, 0, 50, self.height))
-        #draw the bottom pipe
-        pygame.draw.rect(screen, (0, 255, 0), (self.x, self.height + self.gap, 50, 600 - (self.height + self.gap)))
-        
-    
+        top_height = self.height
+        bottom_height = 800 - (self.height + self.gap)
+                                   
+                                   
+        # Draw the top pipe
+        screen.blit(self.top_pipe, (self.x, top_height - self.top_pipe.get_height()))
+        # Draw the bottom pipe
+        screen.blit(self.bottom_pipe, (self.x, self.height + self.gap))
+       
 pipes = []
 spawn_pipe = 0 #timer for pipe spawn
 bird = Bird()
@@ -59,6 +64,8 @@ def check_collision(bx, by, px, py):
         return True
     return False
 
+ticker = 0 #leave this here!
+
 ticker+=1
 if ticker%10 == 0:
     ticker = 0
@@ -71,6 +78,11 @@ while running: #game loop+================================================
                running = False
          if event.type == pygame.MOUSEBUTTONDOWN:
                 bird.flap()
+                
+    ticker+=1
+    if ticker%10 == 0:
+        ticker = 0
+        score+=1
            
     bird.physics()
     
@@ -107,9 +119,8 @@ while running: #game loop+================================================
     
         
 #---end of game loop-----------------------------------------------------
- text = font2.render("GAME OVER", True, (255, 50,50))
- screen.blit(text, (200, 200))
- pygame.display.flip()
- pygame.time.delay(2000)
- pygame.quit()
+text = font2.render("GAME OVER", True, (255, 50,50))
+screen.blit(text, (200, 200))
+pygame.display.flip()
+pygame.time.delay(2000)
 pygame.quit()
