@@ -9,10 +9,13 @@ font = pygame.font.Font(None, 36)
 font2 = pygame.font.Font(None, 72)
 pipe_image = pygame.image.load('pipe.png').convert_alpha()
 pipe_image = pygame.image.load('bird.png').convert_alpha()
-background_image = pygame.image.load('backround_image').convert_alpha()
+background_image = pygame.image.load('alejandroemo.jpg.jpg').convert_alpha()
 #copy/paste the line above, but have "bird" instead
 score = 0
 frameNum = 0
+bg_x1 = 0
+bg_x2 = 800
+
 running = True
 
 #put animation variables here
@@ -93,7 +96,7 @@ while running: #game loop+================================================
     bird.physics()
     
     spawn_pipe += 1
-    if spawn_pipe >=    screen.blit(backround_image, (0, 0)) 150: #pipe is spawned every 150 frames
+    if spawn_pipe >=  150:  #pipe is spawned every 150 frames
         pipes.append(Pipe(800))#this INSTANTIATES a new pipe and puts it in the list!
         spawn_pipe = 0 #resets timer
         
@@ -111,20 +114,19 @@ while running: #game loop+================================================
     
  # render section -=----------------------------------------------------------          
     screen.fill((0, 0, 0))
-    screen.blit(backround_image, (0, 0))
 # move the two backround positions    
-bg_x1 -= 2
-bg_x2 -= 2
+    bg_x1 -= 2
+    bg_x2 -= 2
     
 #when a backround moves offscreen, reset it
-if bg_x1 <= -800:
-    bg_x1 = 800
-if bg_x2 <= -800:
-    bg_x2 = 800
+    if bg_x1 <= -800:
+        bg_x1 = 800
+    if bg_x2 <= -800:
+        bg_x2 = 800
     
 #Draw the backrounds
-screen.blit(backround_image, (bg_x1, 0))
-screen.blit(backround_image, (bg_x2, 0))
+    screen.blit(background_image, (bg_x1, 0))
+    screen.blit(background_image, (bg_x2, 0))
 
     
 bird.draw()
